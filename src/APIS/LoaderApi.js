@@ -14,17 +14,19 @@ export async function FetchImages() {
 }
 
 export async function handleSearchQuery(request) {
-  let random, query, orientation;
+  let random, query, orientation, count;
+  
   if (request) {
     const url = new URL(request.url);
     query = url.searchParams.get("query");
     random = url.searchParams.get("random");
     orientation = url.searchParams.get("orientation");
+    count=url.searchParams.get("count")
   }
   try {
     if (random) {
       const getImage = await axios.get(
-        `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=10`
+        `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=${count}`
       );
       return getImage ? getImage.data : null;
     }
@@ -33,7 +35,7 @@ export async function handleSearchQuery(request) {
       const params = {
         client_id: apiKey,
         query,
-        per_page: 10,
+        per_page: count,
       };
 
       if (orientation) {
